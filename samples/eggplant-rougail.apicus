@@ -1,6 +1,10 @@
 eggplant rougail {
-  [2] eggplants -> scoop flesh, discard skin -> mash -> $a;
-  [2] white onions or shallots -> mince -> $a;
-  [2] hot peppers -> mince -> $a;
-  $a -> mix &[4tbsp] oil -> DONE;
+  [2] eggplants
+    -> scoop flesh, discard skin
+    -> mash
+    -> $combine
+    -> mix & [4 tbsp] oil
+    -> DONE;
+  [2] white onions or shallots -> mince -> $combine;
+  [2] hot peppers -> mince -> $combine;
 }
