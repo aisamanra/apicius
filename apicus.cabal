@@ -1,0 +1,27 @@
+name:             apicus
+version:          0.1.0.0
+-- synopsis:
+-- description:
+license:          BSD3
+license-file:     LICENSE
+author:           Getty Ritter <gettyritter@gmail.com>
+maintainer:       Getty Ritter <gettyritter@gmail.com>
+copyright:        ©2016 Getty Ritter
+category:         Cookery
+build-type:       Simple
+cabal-version:    >= 1.12
+
+executable apicus
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  other-modules:       Lexer,
+                       Parser,
+                       AST
+  build-tools:         happy, alex
+  default-extensions:  OverloadedStrings,
+                       ScopedTypeVariables
+  ghc-options:         -Wall
+  build-depends:       base >=4.7 && <4.9,
+                       text,
+                       array
+  default-language:    Haskell2010

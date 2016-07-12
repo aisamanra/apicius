@@ -1,0 +1,25 @@
+soondubu jigae {
+  [1/2] yellow onion
+     -> dice
+     -> cook 5m
+     -> $chili
+     -> cook 1m
+     -> $zucchini
+     -> stir &salt
+     -> $kimchi
+     -> simmer 2m
+     -> $broth
+     -> boil &salt
+     -> $tofu
+     -> cover with broth, simmer
+     -> $eggs
+     -> cook 2m
+     -> DONE;
+  [2 tbsp] chili paste -> $chili;
+  [1] zucchini -> dice -> $zucchini;
+  [1 cup] kimchi -> chop coarsely -> $kimchi;
+  [2 cups] beef or chicken broth + [1 tsp] soy sauce
+    -> $broth;
+  [16oz] silken tofu -> $tofu;
+  [3] eggs -> $eggs;
+}

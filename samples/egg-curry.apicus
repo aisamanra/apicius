@@ -1,0 +1,9 @@
+egg curry {
+  [8] eggs -> boil 10m -> $a;
+  [2] onions -> mince -> brown &oil -> stir -> $b;
+  [2] garlic cloves + [1] piece ginger + [1] hot pepper + salt + pepper -> grind -> $b;
+  [4] ripe tomatoes -> chop -> $c;
+  $b -> stir &thyme -> $c;
+  $c -> simmer 5m &saffron -> $a;
+  $a -> stir 10m -> simmer 5m &water -> halve -> DONE;
+}
