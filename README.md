@@ -1,7 +1,7 @@
-# Apicus
+# Apicius
 
 Explorations in recipe visualization. Right now, this just implements
-a DSL for describing recipes in a graph-like way. A basic Apicus recipe
+a DSL for describing recipes in a graph-like way. A basic Apicius recipe
 looks like this:
 
 ```
