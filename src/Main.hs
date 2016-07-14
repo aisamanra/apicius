@@ -1,3 +1,5 @@
+{-# LANGUAGE ParallelListComp #-}
+
 module Main where
 
 import           Data.List (intercalate)
@@ -95,13 +97,41 @@ prettyGraph = go 0
   where go n (ReverseGraph t rs) =
           indent n ++ stepName t ++ "\n" ++ concat (map (go (n+2)) rs)
         indent n = replicate n ' '
-        stepName (Right t) = T.unpack t
-        stepName (Left (IngredientList is)) =
-          intercalate "; " [ ingName i | i <- is ]
-        ingName (Ingredient (Just amt) name) =
+
+stepName :: Either IngredientList Text -> String
+stepName (Right t) = T.unpack t
+stepName (Left (IngredientList is)) =
+  intercalate "; " [ ingName i | i <- is ]
+  where ingName (Ingredient (Just amt) name) =
           T.unpack amt ++ " " ++ T.unpack name
         ingName (Ingredient Nothing name) =
           T.unpack name
 
+stepMeta :: Either IngredientList Text -> String
+stepMeta (Right t) = " [label=\"" ++ T.unpack t ++ "\",color=red]"
+stepMeta (Left (IngredientList is)) =
+  " [label=\"" ++ intercalate "; " [ ingName i | i <- is ] ++ "\"]"
+  where ingName (Ingredient (Just amt) name) =
+          T.unpack amt ++ " " ++ T.unpack name
+        ingName (Ingredient Nothing name) =
+          T.unpack name
+
+dotGraph :: Text -> ReverseGraph -> String
+dotGraph rname gr = ("digraph \"" ++ T.unpack rname ++ "\" {\n") ++ unlines (go "n" 0 gr) ++ "\n}"
+  where go :: String -> Int -> ReverseGraph -> [String]
+        go parent n (ReverseGraph t rs) =
+          let name = parent ++ "_" ++ show n
+              children = [ (i, name ++ "_" ++ show i, r)
+                         | i <- [0..]
+                         | r <- rs
+                         ]
+          in [ "  " ++ name ++ stepMeta t ] ++
+             [ "  " ++ cname ++ " -> " ++ name ++ ";"
+             | (_, cname, _) <- children
+             ] ++
+             concat [ go name i r
+                    | (i, _, r) <- children
+                    ]
+
 showRecipeGraph :: Recipe -> String
-showRecipeGraph = prettyGraph . buildReverseGraph . getChunks
+showRecipeGraph r@(Recipe name _) = dotGraph name . buildReverseGraph . getChunks $ r
