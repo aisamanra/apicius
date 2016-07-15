@@ -76,8 +76,14 @@ lexwrap :: (Token -> Alex a) -> Alex a
 lexwrap = (alexMonadScan' >>=)
 
 happyError :: Token -> Alex a
-happyError (Token p t) =
-  alexError' p ("parse error at token " ++ show t)
+happyError (Token pos this) = do
+  last <- getLastToken
+  let msg = case (fmap tkType last, this) of
+        (Just TkArrow, TkArrow) ->
+          "Missing a step description in between arrows."
+        (_, TkSemi) -> "Unexpected semicolon"
+        (_, _) -> "parse error at token " ++ show this
+  alexError' pos msg
 
 parseFile :: FilePath -> String -> Either String [Recipe]
 parseFile = runAlex' parse

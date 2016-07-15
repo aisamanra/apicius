@@ -37,7 +37,10 @@ tokens :-
   \$ $idchar + { lex (TkJoin . T.strip) }
 
 {
-data Token = Token AlexPosn TkType deriving (Eq, Show)
+data Token = Token
+  { tkPosn :: AlexPosn
+  , tkType :: TkType
+  } deriving (Eq, Show)
 
 data TkType
   = TkLCurl
@@ -55,17 +58,32 @@ data TkType
     deriving (Eq, Show)
 
 data AlexUserState = AlexUserState
-  { filePath :: FilePath
+  { filePath  :: FilePath
+  , lastToken :: Maybe Token
+  , thisToken :: Maybe Token
   } deriving (Eq, Show)
 
 alexInitUserState :: AlexUserState
-alexInitUserState = AlexUserState "<unknown>"
+alexInitUserState = AlexUserState "<unknown>" Nothing Nothing
 
 getFilePath :: Alex FilePath
 getFilePath = liftM filePath alexGetUserState
 
 setFilePath :: FilePath -> Alex ()
-setFilePath = alexSetUserState . AlexUserState
+setFilePath f = do
+  userState <- alexGetUserState
+  alexSetUserState userState { filePath = f }
+
+getLastToken :: Alex (Maybe Token)
+getLastToken = liftM lastToken alexGetUserState
+
+setLastToken :: Token -> Alex ()
+setLastToken t = do
+  userState <- alexGetUserState
+  alexSetUserState userState
+    { lastToken = thisToken userState
+    , thisToken = Just t
+    }
 
 alexMonadScan' :: Alex Token
 alexMonadScan' = do
@@ -80,7 +98,9 @@ alexMonadScan' = do
         alexMonadScan'
     AlexToken inp' len action -> do
         alexSetInput inp'
-        action (ignorePendingBytes inp) len
+        tok <- action (ignorePendingBytes inp) len
+        setLastToken tok
+        return tok
 
 alexError' :: AlexPosn -> String -> Alex a
 alexError' (AlexPn _ l c) msg = do
