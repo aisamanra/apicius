@@ -1,6 +1,6 @@
 {-# LANGUAGE DefaultSignatures #-}
 
-module Util where
+module Apicius.Util where
 
 import           Data.Monoid ((<>))
 import           Data.Text.Buildable (Buildable(..))

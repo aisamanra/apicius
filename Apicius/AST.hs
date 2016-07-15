@@ -1,8 +1,8 @@
-module AST where
+module Apicius.AST where
 
 import Data.Monoid ((<>))
 import Data.Text (Text)
-import Util
+import Apicius.Util
 
 data Recipe = Recipe
   { rName   :: Text
@@ -70,4 +70,3 @@ instance TShow Action where
   text (Action t i) = "Action " <> text t <> " " <> text i
   text (Join t) = "Join " <> text t
   text Done = "Done"
-

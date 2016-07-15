@@ -1,10 +1,10 @@
 {
 {-# LANGUAGE OverloadedStrings #-}
 
-module Parser where
+module Apicius.Parser where
 
-import AST
-import Lexer
+import Apicius.AST
+import Apicius.Lexer
 
 }
 
@@ -19,10 +19,7 @@ import Lexer
   '}' { Token _ TkRCurl }
   '[' { Token _ TkLBrac }
   ']' { Token _ TkRBrac }
-  '(' { Token _ TkLParn }
-  ')' { Token _ TkRParn }
   ';' { Token _ TkSemi  }
-  ',' { Token _ TkComma }
   '+' { Token _ TkPlus }
   '&' { Token _ TkAnd }
 

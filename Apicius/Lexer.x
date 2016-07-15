@@ -2,7 +2,7 @@
 {-# OPTIONS -w #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Lexer where
+module Apicius.Lexer where
 
 import           Control.Monad (liftM)
 import           Data.Text (Text)
@@ -26,10 +26,7 @@ tokens :-
   \}  { lex' TkRCurl }
   \[  { lex' TkLBrac }
   \]  { lex' TkRBrac }
-  \(  { lex' TkLParn }
-  \)  { lex' TkRParn }
   \;  { lex' TkSemi  }
-  \,  { lex' TkComma }
   \+  { lex' TkPlus }
   \&  { lex' TkAnd }
 
@@ -47,10 +44,7 @@ data TkType
   | TkRCurl
   | TkLBrac
   | TkRBrac
-  | TkLParn
-  | TkRParn
   | TkArrow
-  | TkComma
   | TkAnd
   | TkSemi
   | TkDone

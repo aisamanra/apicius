@@ -1,13 +1,12 @@
 {-# LANGUAGE ParallelListComp #-}
 
-module BuildTree where
+module Apicius.ReverseTree where
 
 import           Data.Monoid ((<>))
 import qualified Data.Text as T
 import           Data.Text (Text)
 
-import           AST
-import           Util
+import           Apicius.AST
 
 -- An 'ActionChunk' represents a set of actions in between two join
 -- points. This is 'reversed' from what we'd expect: the 'name' is
@@ -99,35 +98,8 @@ ingName :: Ingredient -> Text
 ingName (Ingredient (Just amt) name) = amt <> " " <> name
 ingName (Ingredient Nothing name)    = name
 
-stepMeta :: Either IngredientList Text -> Text
-stepMeta (Right t) = " [label=\"" <> t <> "\",color=red]"
-stepMeta (Left (IngredientList is)) =
-  " [label=\"" <> T.intercalate "; " [ ingName i | i <- is ] <> "\"]"
-
-dotGraph :: Text -> ReverseGraph -> Text
-dotGraph rname gr =
-  ("digraph \"" <> rname <> "\" {\n") <> T.unlines (go "n" 0 gr) <> "\n}"
-  where go :: Text -> Int -> ReverseGraph -> [Text]
-        go parent n (ReverseGraph t rs) =
-          let name = parent <> "_" <> text n
-              children = [ (i, name <> "_" <> text i, r)
-                         | i <- [0..]
-                         | r <- rs
-                         ]
-          in [ "  " <> name <> stepMeta t ] ++
-             [ "  " <> cname <> " -> " <> name <> ";"
-             | (_, cname, _) <- children
-             ] ++
-             concat [ go name i r
-                    | (i, _, r) <- children
-                    ]
-
 showFragments :: Recipe -> Text
 showFragments = T.pack . show . getChunks
 
-showTree :: Recipe -> Text
-showTree = prettyGraph . buildReverseGraph . getChunks
-
-showDotGraph :: Recipe -> Text
-showDotGraph r@(Recipe name _) =
-  dotGraph name . buildReverseGraph . getChunks $ r
+showReverseTree :: Recipe -> Text
+showReverseTree = prettyGraph . buildReverseGraph . getChunks

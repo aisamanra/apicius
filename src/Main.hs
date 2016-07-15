@@ -10,10 +10,9 @@ import           System.IO ( IOMode(WriteMode)
                            , stdout
                            )
 
-import AST (Recipe)
-import BuildTree (showFragments, showDotGraph, showTree)
-import Parser (parseFile)
-import Util (TShow(text))
+import Apicius.ReverseTree (showFragments, showReverseTree)
+import Apicius.Render.Dot (showDotGraph)
+import Apicius.Language (Recipe, parseFile, showAst)
 
 usage :: String
 usage =
@@ -21,10 +20,10 @@ usage =
 
 renderers :: [(String, Recipe -> Text)]
 renderers =
-  [ ("ast", text)
-  , ("fragments", showFragments)
-  , ("dot", showDotGraph)
-  , ("reverse-tree", showTree)
+  [ ("ast",          showAst)
+  , ("fragments",    showFragments)
+  , ("dot",          showDotGraph)
+  , ("reverse-tree", showReverseTree)
   ]
 
 main :: IO ()
