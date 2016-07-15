@@ -11,8 +11,9 @@ import           System.IO ( IOMode(WriteMode)
                            )
 
 import AST (Recipe)
-import BuildTree (showDotGraph, showTree)
+import BuildTree (showFragments, showDotGraph, showTree)
 import Parser (parseFile)
+import Util (TShow(text))
 
 usage :: String
 usage =
@@ -20,7 +21,9 @@ usage =
 
 renderers :: [(String, Recipe -> Text)]
 renderers =
-  [ ("dot", showDotGraph)
+  [ ("ast", text)
+  , ("fragments", showFragments)
+  , ("dot", showDotGraph)
   , ("reverse-tree", showTree)
   ]
 

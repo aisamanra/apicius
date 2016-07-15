@@ -122,6 +122,9 @@ dotGraph rname gr =
                     | (i, _, r) <- children
                     ]
 
+showFragments :: Recipe -> Text
+showFragments = T.pack . show . getChunks
+
 showTree :: Recipe -> Text
 showTree = prettyGraph . buildReverseGraph . getChunks
 

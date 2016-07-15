@@ -17,3 +17,10 @@ class TShow s where
 
 instance TShow Int where
 instance TShow Text where
+
+instance TShow a => TShow [a] where
+  text xs = "[" <> T.intercalate ", " (map text xs) <> "]"
+
+instance TShow a => TShow (Maybe a) where
+  text Nothing = "Nothing"
+  text (Just a) = "Just " <> text a
