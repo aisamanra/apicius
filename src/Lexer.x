@@ -13,6 +13,9 @@ import           Prelude hiding (lex)
 
 %wrapper "monadUserState"
 
+$special = [ \{ \} \[ \] \( \) \; \, \+ \& \- \$ ]
+$idchar = $printable # $special
+
 tokens :-
   $white+ ;
   "#".* ;
@@ -32,9 +35,9 @@ tokens :-
 
   \-\> { lex' TkArrow }
 
-  [A-Za-z0-9_$white\,\/]+ { lex (TkText . T.strip) }
+  $idchar + { lex (TkText . T.strip) }
 
-  \$[A-Za-z0-9_]+ { lex TkJoin }
+  \$ $idchar + { lex (TkJoin . T.strip) }
 
 {
 data Token = Token AlexPosn TkType deriving (Eq, Show)
