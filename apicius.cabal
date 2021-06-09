@@ -19,7 +19,7 @@ library
                        Apicius.Lexer,
                        Apicius.Parser,
                        Apicius.Util
-  build-depends:       base >=4.7 && <4.9,
+  build-depends:       base >=4.7 && <5,
                        text,
                        text-format,
                        array
@@ -35,7 +35,7 @@ executable apicius
   default-extensions:  OverloadedStrings,
                        ScopedTypeVariables
   ghc-options:         -Wall
-  build-depends:       base >=4.7 && <4.9,
+  build-depends:       base >=4.7 && <5,
                        apicius,
                        text,
                        errors

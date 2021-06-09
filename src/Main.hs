@@ -1,29 +1,29 @@
 module Main where
 
-import           Control.Error
-import           Data.Text (Text)
-import qualified Data.Text.IO as T
-import           System.Environment (getArgs)
-import           System.IO ( IOMode(WriteMode)
-                           , hClose
-                           , openFile
-                           , stdout
-                           )
-
-import Apicius.ReverseTree (showFragments, showReverseTree)
-import Apicius.Render.Dot (showDotGraph)
 import Apicius.Language (Recipe, parseFile, showAst)
+import Apicius.Render.Dot (showDotGraph)
+import Apicius.ReverseTree (showFragments, showReverseTree)
+import Control.Error
+import Data.Text (Text)
+import qualified Data.Text.IO as T
+import System.Environment (getArgs)
+import System.IO
+  ( IOMode (WriteMode),
+    hClose,
+    openFile,
+    stdout,
+  )
 
 usage :: String
 usage =
-  unlines ("\n\nCOMMANDS:" : [ "  " ++ r | (r, _) <- renderers ])
+  unlines ("\n\nCOMMANDS:" : ["  " ++ r | (r, _) <- renderers])
 
 renderers :: [(String, Recipe -> Text)]
 renderers =
-  [ ("ast",          showAst)
-  , ("fragments",    showFragments)
-  , ("dot",          showDotGraph)
-  , ("reverse-tree", showReverseTree)
+  [ ("ast", showAst),
+    ("fragments", showFragments),
+    ("dot", showDotGraph),
+    ("reverse-tree", showReverseTree)
   ]
 
 main :: IO ()
@@ -34,11 +34,11 @@ main = runScript $ do
       r <- lookup x renderers ?? ("Unable to find renderer " ++ x)
       cs <- scriptIO getContents
       return ("[stdin]", r, cs, stdout)
-    [x,f] -> do
+    [x, f] -> do
       r <- lookup x renderers ?? ("Unable to find renderer " ++ x)
       cs <- scriptIO $ readFile f
       return (f, r, cs, stdout)
-    [x,f,o] -> do
+    [x, f, o] -> do
       r <- lookup x renderers ?? ("Unable to find renderer " ++ x)
       cs <- scriptIO $ readFile f
       file <- scriptIO $ openFile o WriteMode
